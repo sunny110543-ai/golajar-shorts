@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>골라잘(Golajar) 시니어 공감 쇼츠 10선 & AI 기획 스튜디오</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            900: '#7c2d12',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 커스텀 스크롤바 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* 모바일/태블릿 터치 최적화 및 애니메이션 */
+        .touch-card {
+            transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease;
+        }
+        .touch-card:active {
+            transform: scale(0.98);
+        }
+        .icon-btn-active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col pb-20 sm:pb-0">
+
+    <!-- 상단 헤더 (모바일/데스크톱 반응형 최적화) -->
+    <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('list'); filterCategory('all');">
+                <div class="bg-gradient-to-tr from-orange-500 to-amber-400 p-2 rounded-xl text-white font-bold text-xl flex items-center justify-center w-10 h-10 shadow-lg">
+                    <i class="fa-solid fa-clapperboard"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg sm:text-xl tracking-tight text-white flex items-center gap-2">
+                        골라잘 <span class="text-[11px] bg-orange-500/30 text-orange-300 px-2.5 py-0.5 rounded-full border border-orange-500/40">원터치 스튜디오</span>
+                    </h1>
+                    <p class="text-[11px] text-slate-400 hidden sm:block">아이콘만 터치하면 대본부터 이미지 프롬프트까지 자동 완성!</p>
+                </div>
+            </div>
+            
+            <!-- 데스크톱 상단 액션 버튼 -->
+            <div class="hidden sm:flex items-center space-x-2">
+                <button onclick="switchTab('list')" id="btn-tab-list" class="px-4 py-2 text-sm font-bold rounded-xl transition-all bg-orange-600 text-white shadow flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 쇼츠 기획소
+                </button>
+                <button onclick="switchTab('formula')" id="btn-tab-formula" class="px-4 py-2 text-sm font-bold text-slate-300 hover:text-white rounded-xl transition-all hover:bg-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> 5단계 공식
+                </button>
+                <button onclick="openCustomModal()" class="px-4 py-2 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-all shadow flex items-center gap-2">
+                    <i class="fa-solid fa-circle-plus"></i> 원터치 새 소재
+                </button>
+                <button onclick="downloadHTMLFile()" class="px-3.5 py-2 text-sm font-bold bg-slate-800 hover:bg-slate-700 text-blue-400 border border-slate-700 rounded-xl transition-all flex items-center gap-1.5" title="내 컴퓨터에 앱 저장">
+                    <i class="fa-solid fa-download"></i> 저장
+                </button>
+            </div>
+
+            <!-- 모바일 우측 간편 저장 버튼 -->
+            <div class="flex sm:hidden items-center gap-2">
+                <button onclick="downloadHTMLFile()" class="p-2.5 bg-slate-800 text-blue-400 rounded-xl border border-slate-700 active:scale-95">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- 탭 1: 쇼츠 소재 및 대본 스튜디오 -->
+        <div id="tab-list" class="space-y-6">
+            
+            <!-- 1. 초보자용 3-STEP 원터치 가이드 배너 -->
+            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-5 text-white shadow-lg border border-slate-700/80">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="inline-block text-[11px] font-extrabold bg-orange-500 text-white px-2.5 py-0.5 rounded-full mb-1.5">초보자 10초 완성 가이드</span>
+                        <h2 class="text-lg sm:text-xl font-black tracking-tight">처음이신가요? 아래 순서대로 아이콘만 터치하세요!</h2>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3 text-center">
+                        <div class="bg-white/10 backdrop-blur-xs rounded-xl p-2.5 border border-white/10">
+                            <div class="text-orange-400 text-lg mb-0.5"><i class="fa-solid fa-hand-pointer"></i></div>
+                            <div class="text-[11px] font-bold">1. 주제 아이콘 터치</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-xs rounded-xl p-2.5 border border-white/10">
+                            <div class="text-emerald-400 text-lg mb-0.5"><i class="fa-solid fa-file-lines"></i></div>
+                            <div class="text-[11px] font-bold">2. 20초 대본 확인</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-xs rounded-xl p-2.5 border border-white/10">
+                            <div class="text-sky-400 text-lg mb-0.5"><i class="fa-solid fa-copy"></i></div>
+                            <div class="text-[11px] font-bold">3. 원터치 복사 끝!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 직관적 원터치 아이콘 필터 바 -->
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-orange-500"></i>
+                        원하는 주제의 아이콘을 터치해 보세요
+                    </h3>
+                    <button onclick="openCustomModal()" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5 active:scale-95 transition-transform">
+                        <i class="fa-solid fa-plus"></i> 직접 소재 만들기
+                    </button>
+                </div>
+                
+                <!-- 터치하기 좋은 큼직한 아이콘 버튼 그리드 -->
+                <div class="grid grid-cols-3 sm:grid-cols-6 gap-2.5 pt-1">
+                    <button onclick="filterCategory('all')" class="filter-btn active flex flex-col items-center justify-center p-3 rounded-xl border-2 border-orange-500 bg-orange-50 text-orange-700 transition-all active:scale-95" data-cat="all">
+                        <i class="fa-solid fa-border-all text-xl mb-1"></i>
+                        <span class="text-xs font-extrabold">전체보기</span>
+                    </button>
+                    <button onclick="filterCategory('top3')" class="filter-btn flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-orange-50/50 transition-all active:scale-95" data-cat="top3">
+                        <i class="fa-solid fa-fire text-xl mb-1 text-rose-500"></i>
+                        <span class="text-xs font-extrabold">인기 TOP 3</span>
+                    </button>
+                    <button onclick="filterCategory('health')" class="filter-btn flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-orange-50/50 transition-all active:scale-95" data-cat="health">
+                        <i class="fa-solid fa-heart-pulse text-xl mb-1 text-emerald-500"></i>
+                        <span class="text-xs font-extrabold">건강/안마</span>
+                    </button>
+                    <button onclick="filterCategory('beauty')" class="filter-btn flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-orange-50/50 transition-all active:scale-95" data-cat="beauty">
+                        <i class="fa-solid fa-sparkles text-xl mb-1 text-purple-500"></i>
+                        <span class="text-xs font-extrabold">뷰티/헤어</span>
+                    </button>
+                    <button onclick="filterCategory('life')" class="filter-btn flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-orange-50/50 transition-all active:scale-95" data-cat="life">
+                        <i class="fa-solid fa-house-chimney-user text-xl mb-1 text-blue-500"></i>
+                        <span class="text-xs font-extrabold">생활/안전</span>
+                    </button>
+                    <button onclick="filterCategory('kitchen')" class="filter-btn flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-orange-50/50 transition-all active:scale-95" data-cat="kitchen">
+                        <i class="fa-solid fa-utensils text-xl mb-1 text-amber-500"></i>
+                        <span class="text-xs font-extrabold">주방/정리</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. 카드 그리드 (카드 전체 터치 가능하도록 개선) -->
+            <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- JS로 동적 생성됨 -->
+            </div>
+        </div>
+
+        <!-- 탭 2: 5단계 공식 & 골라잘 제작 원칙 -->
+        <div id="tab-formula" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <h2 class="text-2xl font-extrabold text-slate-900 flex items-center gap-3">
+                        <i class="fa-solid fa-bullseye text-orange-500"></i>
+                        골라잘 바이럴 쇼츠 5단계 공식 & 브랜드 원칙
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-1">광고처럼 보이지 않으면서 구매 욕구를 자연스럽게 자극하는 핵심 가이드</p>
+                </div>
+
+                <!-- 5단계 공식 파이프라인 -->
+                <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-timeline text-orange-500"></i> 쇼츠 20초 타임라인 5단계 공식
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+                    <div class="bg-gradient-to-b from-orange-50 to-white p-4 rounded-xl border border-orange-200 shadow-xs relative">
+                        <span class="text-xs font-black text-orange-600 bg-orange-100 px-2 py-0.5 rounded">1단계: 0~2초</span>
+                        <h4 class="font-bold text-slate-900 mt-2 mb-1">황당 / 극강 공감</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">제품 노출 금지! 사람/캐릭터의 극적인 상황으로 시선 압도</p>
+                    </div>
+                    <div class="bg-gradient-to-b from-amber-50 to-white p-4 rounded-xl border border-amber-200 shadow-xs relative">
+                        <span class="text-xs font-black text-amber-600 bg-amber-100 px-2 py-0.5 rounded">2단계: 3~7초</span>
+                        <h4 class="font-bold text-slate-900 mt-2 mb-1">문제 심화 (과장)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">불편함을 과장되거나 유머러스하게 표현하여 웃음과 공감 유발</p>
+                    </div>
+                    <div class="bg-gradient-to-b from-emerald-50 to-white p-4 rounded-xl border border-emerald-200 shadow-xs relative">
+                        <span class="text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">3단계: 8~13초</span>
+                        <h4 class="font-bold text-slate-900 mt-2 mb-1">뜻밖의 해결책</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">제품이 소품처럼 자연스럽게 툭 등장. 해결 행동 시작</p>
+                    </div>
+                    <div class="bg-gradient-to-b from-sky-50 to-white p-4 rounded-xl border border-sky-200 shadow-xs relative">
+                        <span class="text-xs font-black text-sky-600 bg-sky-100 px-2 py-0.5 rounded">4단계: 14~18초</span>
+                        <h4 class="font-bold text-slate-900 mt-2 mb-1">사용 및 시원한 반전</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">실제 편해진 결과와 만족스러운 캐릭터 반응 직관적으로 제시</p>
+                    </div>
+                    <div class="bg-gradient-to-b from-purple-50 to-white p-4 rounded-xl border border-purple-200 shadow-xs relative">
+                        <span class="text-xs font-black text-purple-600 bg-purple-100 px-2 py-0.5 rounded">5단계: 19~20초</span>
+                        <h4 class="font-bold text-slate-900 mt-2 mb-1">공감 마무리</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">"이런 거 하나 있으면 편하겠네~" 강요 없는 여운형 유도</p>
+                    </div>
+                </div>
+
+                <!-- 골라잘 전용 5가지 원칙 -->
+                <div class="bg-slate-900 text-white rounded-xl p-5 space-y-4">
+                    <h3 class="font-bold text-orange-400 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> 골라잘(Golajar) 제작 철학 & 가이드라인
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
+                        <div class="flex gap-2">
+                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                            <div><strong class="text-white">직접 판매 유도 자제:</strong> "지금 사세요!" 대신 "집에 두면 든든하겠네" 느낌 연출</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                            <div><strong class="text-white">상황 중심 묘사:</strong> 제품 스펙/장점 열거 지양, '사용하기 좋은 상황'을 모션으로 전달</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                            <div><strong class="text-white">주체적 시니어 캐릭터:</strong> 무능함이나 답답함이 아닌 재치 있고 귀여운 시니어 캐릭터 설정</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                            <div><strong class="text-white">의학적 과장 금지:</strong> 질병 치료나 과장된 건강 효능 언급 절대 불가 (순수 일상 편의성 강조)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 모바일 전용 하단 원터치 내비게이션 바 (엄지손가락 터치 최적화) -->
+    <nav class="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 z-40 px-2 py-1.5 flex justify-around items-center shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        <button onclick="switchTab('list')" id="mob-tab-list" class="flex flex-col items-center justify-center py-1 px-3 text-orange-600 font-bold">
+            <i class="fa-solid fa-clapperboard text-lg mb-0.5"></i>
+            <span class="text-[11px]">쇼츠 소재</span>
+        </button>
+        <button onclick="openCustomModal()" class="flex flex-col items-center justify-center -mt-5 bg-gradient-to-tr from-emerald-600 to-teal-500 text-white w-14 h-14 rounded-full shadow-lg border-4 border-white active:scale-95 transition-transform">
+            <i class="fa-solid fa-plus text-xl"></i>
+        </button>
+        <button onclick="switchTab('formula')" id="mob-tab-formula" class="flex flex-col items-center justify-center py-1 px-3 text-slate-500 font-bold">
+            <i class="fa-solid fa-graduation-cap text-lg mb-0.5"></i>
+            <span class="text-[11px]">5단계 공식</span>
+        </button>
+    </nav>
+
+    <!-- 상세보기 & 프롬프트 모달 -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4 hidden" onclick="if(event.target === this) closeDetailModal()">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200">
+            <!-- 모달 헤더 -->
+            <div class="p-4 sm:p-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+                <div class="flex items-center gap-2.5">
+                    <span id="modal-badge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-orange-500 text-white">1위</span>
+                    <h3 id="modal-title" class="text-base sm:text-lg font-bold text-white">메두사 할머니의 변신</h3>
+                </div>
+                <button onclick="closeDetailModal()" class="text-slate-300 hover:text-white text-xl w-9 h-9 rounded-full flex items-center justify-center bg-slate-800 hover:bg-slate-700 transition-colors active:scale-95">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- 모달 바디 (스크롤 영역) -->
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-5 flex-grow bg-slate-50">
+                
+                <!-- 기본 정보 요약 카드 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                    <div>
+                        <span class="text-[11px] text-slate-400 block font-semibold">자연스럽게 등장시킬 제품</span>
+                        <strong id="modal-product" class="text-slate-800 text-sm font-bold">헤어 에센스, 빗, 드라이기</strong>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-slate-400 block font-semibold">첫 장면 후킹 문구</span>
+                        <span id="modal-hook" class="text-orange-600 font-bold text-sm italic">"내 머리가 왜 내 말을 안 듣는 거야?"</span>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-slate-400 block font-semibold">바이럴 포인트</span>
+                        <span id="modal-appeal" class="text-slate-700 text-sm">뱀처럼 살아 움직이는 엉킨 머리의 시각적 재미</span>
+                    </div>
+                </div>
+
+                <!-- 5단계 씬 대본 타임라인 -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                            <i class="fa-solid fa-film text-orange-500"></i> 20초 씬별 시나리오 & 성우 대본
+                        </h4>
+                        <button onclick="copyScriptText()" class="text-xs font-bold px-3.5 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-xl shadow-xs transition-all active:scale-95 flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> 대본 전체 원터치 복사
+                        </button>
+                    </div>
+                    <div id="modal-timeline" class="space-y-2.5">
+                        <!-- JS Dynamic insertion -->
+                    </div>
+                </div>
+
+                <!-- AI 이미지 / 비디오 생성 프롬프트 영역 -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                            <i class="fa-solid fa-image text-purple-600"></i> AI 그림 생성 프롬프트 (영어 명령어)
+                        </h4>
+                        <span class="text-[11px] bg-purple-50 text-purple-700 font-bold px-2 py-0.5 rounded">복사 후 AI에 붙여넣기</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-bold text-slate-600">Scene 1 (첫 장면 시선강탈 컷)</label>
+                                <button onclick="copyPrompt('prompt-s1')" class="text-xs bg-slate-800 hover:bg-slate-700 text-white font-bold px-3 py-1 rounded-lg transition-all active:scale-95 flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> 복사하기
+                                </button>
+                            </div>
+                            <textarea id="prompt-s1" readonly class="w-full text-xs font-mono bg-slate-900 text-emerald-400 p-3 rounded-xl border border-slate-700 h-16 resize-none focus:outline-none"></textarea>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-bold text-slate-600">Scene 3 (제품 자연스러운 등장 컷)</label>
+                                <button onclick="copyPrompt('prompt-s3')" class="text-xs bg-slate-800 hover:bg-slate-700 text-white font-bold px-3 py-1 rounded-lg transition-all active:scale-95 flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> 복사하기
+                                </button>
+                            </div>
+                            <textarea id="prompt-s3" readonly class="w-full text-xs font-mono bg-slate-900 text-emerald-400 p-3 rounded-xl border border-slate-700 h-16 resize-none focus:outline-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 모달 푸터 -->
+            <div class="p-3.5 sm:p-4 bg-white border-t border-slate-200 flex justify-between items-center">
+                <span class="text-xs text-slate-500 hidden sm:inline"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> 팁: 시니어 캐릭터는 주체적이고 재치 있게 표현해주세요.</span>
+                <button onclick="closeDetailModal()" class="w-full sm:w-auto px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition-all active:scale-95">확인 완료 (닫기)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 신규 소재 추가 / 원터치 아이콘 선택 모달 (20개 카테고리 확장) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4 hidden" onclick="if(event.target === this) closeCustomModal()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200">
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-emerald-700 to-teal-600 text-white flex items-center justify-between">
+                <div>
+                    <h3 class="text-base sm:text-lg font-extrabold flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> 원터치 새 소재 만들기 (20대 인기 분야)
+                    </h3>
+                    <p class="text-xs text-emerald-100 mt-0.5">아이콘을 터치하면 추천 상황과 후킹 문구가 자동으로 채워집니다!</p>
+                </div>
+                <button onclick="closeCustomModal()" class="text-white hover:bg-white/20 text-xl w-9 h-9 rounded-full flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="custom-form" onsubmit="handleCustomSubmit(event)" class="p-4 sm:p-6 overflow-y-auto space-y-5 flex-grow">
+                
+                <!-- STEP 1: 20개 시니어 인기 카테고리 아이콘 원터치 선택 -->
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-800 mb-2 flex items-center justify-between">
+                        <span><span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded mr-1">STEP 1</span> 분야 아이콘을 터치하세요 (자동 샘플 입력)</span>
+                        <span id="selected-cat-label" class="text-emerald-600 font-bold">선택됨: 건강기능식품/영양제</span>
+                    </label>
+                    <div id="icon-category-grid" class="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-48 overflow-y-auto p-1.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <!-- JS로 20개 아이콘 버튼 자동 생성 -->
+                    </div>
+                </div>
+
+                <!-- STEP 2: 자동 채워진 내용 확인 및 수정 -->
+                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                    <div class="text-xs font-extrabold text-slate-800 mb-1">
+                        <span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded mr-1">STEP 2</span> 자동 완성된 내용을 확인하거나 살짝 고쳐보세요
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">쇼츠 제목 (에피소드)</label>
+                            <input type="text" id="inp-title" required class="w-full text-sm bg-white border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">자연스럽게 등장할 제품</label>
+                            <input type="text" id="inp-product" required class="w-full text-sm bg-white border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1">첫 장면 후킹 대사 (0~2초 시선강탈)</label>
+                        <input type="text" id="inp-hook" required class="w-full text-sm bg-white border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-bold text-orange-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1">공감 상황극 포인트</label>
+                        <textarea id="inp-desc" rows="2" required class="w-full text-sm bg-white border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <div class="pt-1 flex gap-2.5">
+                    <button type="button" onclick="closeCustomModal()" class="w-1/3 py-3 bg-slate-200 text-slate-700 text-sm font-bold rounded-xl hover:bg-slate-300 transition-colors">취소</button>
+                    <button type="submit" class="w-2/3 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-extrabold rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> 20초 대본 & 프롬프트 즉시 생성
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 알림 토스트 메시지 -->
+    <div id="toast" class="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 bg-slate-900 text-white text-xs sm:text-sm font-bold px-4 py-3 rounded-xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 z-50 flex items-center gap-2.5 border border-slate-700">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-msg">복사되었습니다.</span>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 py-6 text-center text-xs mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-medium text-slate-300">골라잘 (Golajar) 시니어 공감 쇼츠 원터치 스튜디오</p>
+            <p class="mt-1 text-slate-500">"제품은 이야기를 거들 뿐, 주인공은 언제나 시니어의 웃음입니다."</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 로직 -->
+    <script>
+        // 20가지 시니어 인기 & 바이럴 특화 카테고리 아이콘 데이터 (원터치 자동 채우기 지원)
+        const seniorCategories20 = [
+            { id: 'supplements', filterGroup: 'health', name: '건강/영양제', icon: 'fa-pills', color: 'text-emerald-600', sampleTitle: '약통 열다가 하루 다 가는 할아버지', sampleProduct: '요일별 원터치 스마트 약통', sampleHook: '내가 오늘 아침 약을 먹었나 안 먹었나?', sampleDesc: '약 봉지 뜯느라 힘 빼고 먹었는지 헷갈려서 고개 갸우뚱하는 상황' },
+            { id: 'fashion', filterGroup: 'beauty', name: '시니어 패션', icon: 'fa-shirt', color: 'text-purple-600', sampleTitle: '외출복 고르다 옷장 무너진 날', sampleProduct: '구김 없는 플리츠 체형커버 아우터', sampleHook: '입을 옷이 하나도 없네, 다 왜 이래!', sampleDesc: '모임 나가야 하는데 배 나오고 구겨진 옷 때문에 한숨 쉬는 상황' },
+            { id: 'shoes', filterGroup: 'life', name: '기능성 신발', icon: 'fa-shoe-prints', color: 'text-blue-600', sampleTitle: '현관에서 신발 끈과 싸우는 할아버지', sampleProduct: '손 안 대고 쏙 신는 다이얼 컴포트화', sampleHook: '신발 한 번 신는데 허리가 끊어지겠네!', sampleDesc: '현관에 쪼그려 앉아 운동화 끈 묶다가 어지러워 휘청이는 상황' },
+            { id: 'medical', filterGroup: 'health', name: '건강측정/안마', icon: 'fa-heart-pulse', color: 'text-rose-600', sampleTitle: '안마 받는 곰의 행복한 하루', sampleProduct: '무선 온열 어깨 마사지 쿠션', sampleHook: '아이고, 오늘은 내 몸이 먼저 쉬자고 하네.', sampleDesc: '온몸이 뻐근해 걷지도 못하다가 따뜻한 찜질로 노곤하게 풀리는 상황' },
+            { id: 'hmr', filterGroup: 'kitchen', name: '간편식/보양식', icon: 'fa-bowl-rice', color: 'text-amber-600', sampleTitle: '불 앞에서 땀 뻘뻘 흘리는 점심시간', sampleProduct: '3분 완성 저염 영양 보양 밀키트', sampleHook: '혼자 밥 차려 먹기가 제일 귀찮아!', sampleDesc: '반찬 투정 없이 든든하게 먹고 싶은데 불 쓰기 무섭고 번거로운 상황' },
+            { id: 'safety', filterGroup: 'life', name: '생활안전/편의', icon: 'fa-shield-heart', color: 'text-teal-600', sampleTitle: '화장실 물기 보고 얼어붙은 할머니', sampleProduct: '강력 흡착 욕실 미끄럼 방지 매트', sampleHook: '아이쿠! 방금 천장 구경할 뻔했네!', sampleDesc: '욕실 타일 물기에 발이 쭉 미끄러져 가슴을 쓸어내리는 아찔한 상황' },
+            { id: 'outdoor', filterGroup: 'health', name: '등산/파크골프', icon: 'fa-person-hiking', color: 'text-green-600', sampleTitle: '파크골프장 에이스의 비밀병기', sampleProduct: '초경량 충격흡수 트레킹 스틱 & 장갑', sampleHook: '어제 공 좀 쳤다고 손목이 시큰거리네?', sampleDesc: '친구들과 나들이 갔다가 무릎과 손목이 뻐근해 뒤처지는 상황' },
+            { id: 'skincare', filterGroup: 'beauty', name: '뷰티/새치케어', icon: 'fa-wand-sparkles', color: 'text-pink-600', sampleTitle: '갑작스런 동창회 연락에 당황한 사연', sampleProduct: '1분 쓱싹 새치 커버 스틱 & 보습 크림', sampleHook: '거울 속 이 하얀 머리카락은 언제 자랐지?', sampleDesc: '외출 직전 정수리 새치를 발견하고 염색할 시간은 없어 발 동동 구르는 상황' },
+            { id: 'digital', filterGroup: 'life', name: '스마트/가전', icon: 'fa-watch-smart', color: 'text-indigo-600', sampleTitle: '전화벨 못 듣고 놓쳐서 속상한 날', sampleProduct: '큰 화면 건강체크 스마트워치', sampleHook: '가방 속에 폰이 들어가면 들리질 않아!', sampleDesc: '자식 전화 놓치고 미안해하다가 손목 진동으로 바로 받는 반전 상황' },
+            { id: 'mobility', filterGroup: 'health', name: '보행보조/지팡이', icon: 'fa-crutch', color: 'text-cyan-600', sampleTitle: '시장 다녀오다 다리 풀린 할머니', sampleProduct: '의자 변신 초경량 접이식 지팡이', sampleHook: '집까지 반도 안 왔는데 다리가 천근만근이네!', sampleDesc: '장바구니 들고 걷다 쉴 벤치가 없어 난감해하다 1초 만에 의자를 펼치는 상황' },
+            { id: 'garden', filterGroup: 'life', name: '베란다 원예', icon: 'fa-seedling', color: 'text-lime-600', sampleTitle: '베란다 화분 물 주다 물바다 된 사연', sampleProduct: '자동 분사 무선 원예 분무기', sampleHook: '화분에 물 주려다 내 옷을 다 적셨네!', sampleDesc: '무거운 물뿌리개 들고 허리 숙이다 물 쏟고 손목 아파하는 상황' },
+            { id: 'pet', filterGroup: 'life', name: '반려동물 케어', icon: 'fa-paw', color: 'text-orange-500', sampleTitle: '강아지 털과 전쟁 치르는 할아버지', sampleProduct: '원터치 털 제거 스팀 펫 브러시', sampleHook: '우리 복실이 털이 눈처럼 날리네 날려!', sampleDesc: '검은 바지에 강아지 털이 잔뜩 붙어 테이프 떼다 지치는 코믹 상황' },
+            { id: 'sleep', filterGroup: 'health', name: '수면/꿀잠베개', icon: 'fa-bed', color: 'text-violet-600', sampleTitle: '새벽 3시까지 천장만 보는 할머니', sampleProduct: '목주름·거북목 편한 경추 꿀잠 베개', sampleHook: '양을 천 마리 세었는데도 잠이 안 와!', sampleDesc: '베개가 높아서 목이 꺾이고 밤새 뒤척이다 아침을 맞이하는 피곤한 상황' },
+            { id: 'bath', filterGroup: 'life', name: '욕실/발세정', icon: 'fa-shower', color: 'text-sky-600', sampleTitle: '발 닦으려다 학다리 된 할아버지', sampleProduct: '서서 뿌리는 거품 풋샴푸 & 실리콘 솔', sampleHook: '발 하나 닦는데 중심 잡기가 왜 이리 힘들어!', sampleDesc: '욕실에서 허리 숙여 발 씻다 비누 거품에 휘청거리는 위험천만 상황' },
+            { id: 'car', filterGroup: 'life', name: '자동차/운전', icon: 'fa-car-side', color: 'text-slate-700', sampleTitle: '후진 주차하다 목에 담 온 사연', sampleProduct: '사각지대 제로 와이드 보조거울 & 등쿠션', sampleHook: '고개가 뒤로 안 돌아가서 주차를 못 하겠네!', sampleDesc: '좁은 주차장에서 뒤돌아보다 목 삐끗하고 문콕할까 봐 진땀 빼는 상황' },
+            { id: 'cookware', filterGroup: 'kitchen', name: '가벼운 주방용품', icon: 'fa-fire-burner', color: 'text-red-500', sampleTitle: '무거운 냄비 들다 손목 꺾인 날', sampleProduct: '초경량 티타늄 코팅 1인 냄비', sampleHook: '국물 한 번 옮기려다 팔목이 나가겠어!', sampleDesc: '무쇠 냄비가 너무 무거워 양손으로 부들부들 떨며 옮기는 아슬아슬한 상황' },
+            { id: 'cleaning', filterGroup: 'life', name: '청소 자동화', icon: 'fa-broom', color: 'text-teal-500', sampleTitle: '청소하다가 허리와 협상하는 할머니', sampleProduct: '서서 닦는 스프레이 길이조절 밀대', sampleHook: '오늘 청소는 여기까지만 하자… 허리가 파업했어!', sampleDesc: '바닥 쪼그려 앉아 걸레질하다 허리 붙잡고 휴전을 선언하는 상황' },
+            { id: 'travel', filterGroup: 'life', name: '여행/나들이', icon: 'fa-suitcase-rolling', color: 'text-indigo-500', sampleTitle: '계모임 여행 짐 싸다 지친 할머니', sampleProduct: '바퀴 달린 초경량 확장형 보조가방', sampleHook: '놀러 가기도 전에 짐 들다 기운 다 빠지겠네!', sampleDesc: '무거운 가방 어깨에 메고 끙끙대다 스르륵 굴러가는 가방으로 대반전' },
+            { id: 'eyecare', filterGroup: 'health', name: '눈건강/돋보기', icon: 'fa-glasses', color: 'text-amber-700', sampleTitle: '돋보기 없이는 못 사는 할머니', sampleProduct: '스마트폰 확대경 거치대 & 목걸이 돋보기', sampleHook: '글씨가 왜 이렇게 작아졌어? 나만 안 보이나?', sampleDesc: '카톡 글씨 보려고 팔을 끝까지 뻗고 눈을 찡그리는 코믹 상황' },
+            { id: 'gift', filterGroup: 'kitchen', name: '효도/명절선물', icon: 'fa-gift', color: 'text-rose-500', sampleTitle: '자식들 선물 보고 속마음 들킨 날', sampleProduct: '고급 수제 한과 & 건강 즙 선물세트', sampleHook: '현금이 최고라더니 이건 진짜 센스 있네!', sampleDesc: '쓸모없는 장식품 대신 실속 만점 건강 선물을 받고 입꼬리가 올라가는 상황' }
+        ];
+
+        // 10가지 핵심 데이터베이스 (필터 그룹을 6대 직관 카테고리와 매핑)
+        const shortsData = [
+            {
+                id: 1,
+                rank: 1,
+                top3: true,
+                category: 'beauty',
+                title: '메두사 할머니의 변신',
+                product: '헤어 에센스, 엉킴방지 빗',
+                hook: '"내 머리가 왜 내 말을 안 듣는 거야?"',
+                appeal: '시각적 재미 (머리카락이 뱀처럼 살아 움직임)',
+                badgeColor: 'bg-rose-500',
+                bgGradient: 'from-rose-50 to-orange-50',
+                borderColor: 'border-rose-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "할머니 머리카락이 뱀처럼 유연하게 사방으로 뻗치며 움직이는 파격 코믹 CG 컷", tts: "내 머리가 왜 내 말을 안 듣는 거야?!" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "일반 빗으로 빗다가 턱턱 막히고 할머니가 머리카락과 레슬링하듯 격투", tts: "아침마다 이 머리카락들이랑 한판 승부를 벌인다니까!" },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "손에 착 감기는 에센스를 톡톡 뿌리고 부드러운 빗이 소품처럼 짠 등장", tts: "어라? 여기에 기름칠 좀 해주고 쓱 빗어주니까..." },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "스르륵 비단결처럼 내려가며 찰랑거리는 엘레강스 할머니로 대변신", tts: "오호라! 메두사 같던 머리가 찰랑찰랑 비단결이 됐네?" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "미소를 지으며 거울을 보고 만족스러운 표정", tts: "이런 거 집에 빗 옆에 하나 두면 아침이 평화롭겠어~" }
+                ],
+                promptS1: "3D Pixar style high resolution, cute elderly Korean grandma character, hair reacting like funny soft snakes popping out wildly, exaggerated surprised expression, bright indoor background --ar 9:16",
+                promptS3: "3D animation style close up, hand holding a sleek hair brush smoothing down tangled hair smoothly, glowing shine effect, satisfying transformation --ar 9:16"
+            },
+            {
+                id: 2,
+                rank: 2,
+                top3: true,
+                category: 'health',
+                title: '안마 받는 곰의 행복한 하루',
+                product: '온열 찜질기, 마사지 쿠션',
+                hook: '"아이고, 오늘은 내 몸이 먼저 쉬자고 하네."',
+                appeal: '공감과 힐링 (피곤한 몸을 풀어주는 따뜻한 위로)',
+                badgeColor: 'bg-amber-500',
+                bgGradient: 'from-amber-50 to-orange-50',
+                borderColor: 'border-amber-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "거대하고 피곤한 곰 인형이 어깨에 바위를 얹은 듯 끙끙대며 걷는 코믹 연출", tts: "아이고, 오늘은 온몸 뼈 마디마디가 비명을 지르네!" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "소파에 털썩 눕는데 허리와 어깨가 굳어서 삐걱거리는 로봇 같은 모습", tts: "안 쑤시는 곳이 없어... 곰도 울고 갈 피로라니까." },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "소파 뒤에 있던 콤팩트 온열 마사지 쿠션에 조용히 어깨를 대는 곰", tts: "에라 모르겠다, 따스하게 모터 발동 좀 시켜볼까?" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "은은한 붉은 온열 빛이 들어오며 곰 얼굴에 표정이 녹아내리듯 극강의 행복감을 표출", tts: "크으~ 노곤노곤하게 사르르 녹는다 녹아!" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "편안하게 차 한 잔 마시며 쉬는 곰", tts: "이런 찜질기 하나면 오늘 밤 잠은 쿨쿨 잘 오겠네." }
+                ],
+                promptS1: "3D adorable character, exhausted giant teddy bear sitting heavily on a cozy sofa holding its lower back, dramatic funny tired expression, warm lighting --ar 9:16",
+                promptS3: "Cozy living room atmosphere, glowing warm massage cushion leaning on back, bear smiling with eyes closed in total relaxation, steam effect --ar 9:16"
+            },
+            {
+                id: 3,
+                rank: 3,
+                top3: true,
+                category: 'kitchen',
+                title: '뚜껑과의 전쟁',
+                product: '실리콘 병뚜껑 오프너',
+                hook: '"이 작은 뚜껑이 나를 이기려고 하네?"',
+                appeal: '생활 밀착형 (악력 부족으로 잼통 안 열릴 때의 답답함 공감)',
+                badgeColor: 'bg-emerald-600',
+                bgGradient: 'from-emerald-50 to-teal-50',
+                borderColor: 'border-emerald-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "잼통을 들고 얼굴이 붉어지도록 온힘을 다해 비트는 할아버지의 땀방울 튀는 컷", tts: "이 작은 뚜껑 녀석이 감히 나한테 덤벼?" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "고무장갑 끼고 덤벼도 미끄러지고, 숟가락으로 쳐봐도 꼼짝 안 함", tts: "고무장갑을 껴도 헛둘! 헛둘! 안 열리네 진짜..." },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "서랍에서 만능 그립 오프너를 툭 꺼내 뚜껑에 쓱 맞물림", tts: "너 딱 걸렸다. 지레 원리 맛 좀 볼래?" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "힘 안 주고 툭 돌리자 '퐁!' 하고 감미로운 소리와 함께 쉽게 열림", tts: "퐁-! 껄껄! 손가락 하나로도 툭 열리잖아?" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "잼을 빵에 쓱 바르며 승리자의 미소", tts: "서랍에 이거 하나 두면 자식들 안 불러도 되겠어!" }
+                ],
+                promptS1: "Close up shot, funny Korean grandfather struggling with all his strength trying to open a stubborn jam jar, vein popping cartoon effect, dramatic tension --ar 9:16",
+                promptS3: "Ergonomic rubber opener tool wrapped around jar cap, opening smoothly with a satisfied pop icon, clean bright kitchen context --ar 9:16"
+            },
+            {
+                id: 4,
+                rank: 4,
+                top3: false,
+                category: 'beauty',
+                title: '미용실에서 벌어진 머리카락 대참사',
+                product: '엉킴 방지 우드 헤어 브러시',
+                hook: '"아이고, 머리 한번 빗으려다 하루 다 가겠네!"',
+                appeal: '파마 후 머리 엉킴 대참사 해소',
+                badgeColor: 'bg-slate-600',
+                bgGradient: 'from-slate-50 to-purple-50',
+                borderColor: 'border-slate-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "파마 후 머리가 덤불처럼 엉켜 빗이 머리에 딱 걸려 안 빠지는 장면", tts: "아이고! 머리 빗다가 빗이 갇혀버렸네!" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "억지로 당기다가 '아악!' 소리지르며 눈물 찔끔 흘리는 할머니", tts: "뜯어내자니 아프고, 그냥 두자니 사자 머리고!" },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "자극 없는 특수 모 브러시를 가져와 엉킨 끝부분부터 살살 쓸어내림", tts: "이럴 땐 당기지 말고 무빙 브러시로 살살살~" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "아픔 없이 슥슥 내려가며 단숨에 깔끔한 웨이브로 정리됨", tts: "어머나, 걸리는 거 하나 없이 쑥 내려가네?" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "머리를 만지며 단아하게 미소", tts: "머리숱 많은 우리 집 필수템이네!" }
+                ],
+                promptS1: "Curly hair grandma with a hair comb stuck tightly in afro puffy hair, comic shocked face, colorful salon setting --ar 9:16",
+                promptS3: "Soft bristle wooden hairbrush gliding smoothly through wavy hair without pain, smooth motion graphic lines --ar 9:16"
+            },
+            {
+                id: 5,
+                rank: 5,
+                top3: false,
+                category: 'life',
+                title: '리모컨 실종 사건',
+                product: '소파 틈새 수납 정리함 & 거치대',
+                hook: '"내가 분명 여기 뒀는데… 또 어디 갔지?"',
+                appeal: '매일 반복되는 리모컨/돋보기 실종 공감',
+                badgeColor: 'bg-slate-600',
+                bgGradient: 'from-slate-50 to-blue-50',
+                borderColor: 'border-slate-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "할아버지가 돋보기 쓰고 소파 쿠션을 엎으며 당황하는 컷", tts: "뉴스 봐야 하는데 리모컨이 땅으로 꺼졌나!" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "소파 밑, 냉장고 위, 심지어 밥통 안까지 뒤지는 엉뚱 코믹 연출", tts: "어제 분명 여기 뒀는데 허깨비가 물어갔나?" },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "소파 팔걸이에 깔끔한 가죽 수납 포켓을 쓱 씌움", tts: "이제 소파 옆 자물쇠 보관함에 딱 넣어두면?" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "손만 뻗어 안 보고도 리모컨과 돋보기를 착 뽑아 채널 돌림", tts: "허허! 안 찾아도 손끝에 바로 잡히네!" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "편안하게 본방사수 하는 모습", tts: "집안 수색대 노릇 이제 끝이다 끝!" }
+                ],
+                promptS1: "Elderly Korean grandfather flipping sofa cushions upside down in living room, searching desperately, funny detective meme vibe --ar 9:16",
+                promptS3: "Sleek armrest organizer pocket hanging on side of sofa holding remote controls and reading glasses neatly --ar 9:16"
+            },
+            {
+                id: 6,
+                rank: 6,
+                top3: false,
+                category: 'kitchen',
+                title: '외계인도 놀란 한국 주방',
+                product: '음식물 쓰레기 밀폐 냄새방지 통',
+                hook: '"지구인들은 이 냄새를 참고 산다고?"',
+                appeal: 'SF 코믹 + 여름철 음쓰 냄새 해결 시원함',
+                badgeColor: 'bg-slate-600',
+                bgGradient: 'from-slate-50 to-emerald-50',
+                borderColor: 'border-slate-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "귀여운 외계인 3D 캐릭터가 주방에 왔다가 코를 막고 기절하는 장면", tts: "삐리삐리! 지구 주방에 화학무기가 작동 중이다!" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "초파리 떼가 윙윙거리고 음쓰 봉투 앞에서 할머니가 코를 킁킁대며 괴로워함", tts: "여름만 되면 이 초파리랑 냄새 때문에 살 수가 없어~" },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "원터치 강력 밀폐 통에 음식물을 싹 넣고 뚜껑을 딸깍 닫음", tts: "이 진공 냄새 방어막 뚜껑을 딱 닫아주면?" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "냄새와 초파리가 1초 만에 완벽 차단되어 외계인이 쾌적하게 숨 쉼", tts: "와우! 냄새 0%! 초파리도 헛걸음치고 돌아가네!" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "주방이 상쾌하고 향기 나는 연출", tts: "싱크대 옆에 이거 하나면 여름 주방 걱정 끝!" }
+                ],
+                promptS1: "Cute green alien character holding its nose in dramatic shock inside a kitchen, yellow stink lines animation --ar 9:16",
+                promptS3: "Modern clean airtight food waste container closing with a sleek snap sound effect, clean fresh air aura around it --ar 9:16"
+            },
+            {
+                id: 7,
+                rank: 7,
+                top3: false,
+                category: 'life',
+                title: '양말 신다가 균형 잃은 할아버지',
+                product: '양말 신기 보조기 (Sock Slider)',
+                hook: '"양말 하나 신는데 왜 이렇게 큰일이지?"',
+                appeal: '허리 굽히기 힘든 시니어 숙원 사업 해결',
+                badgeColor: 'bg-slate-600',
+                bgGradient: 'from-slate-50 to-indigo-50',
+                borderColor: 'border-slate-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "한 발로 서서 양말 신으려다 으아아~ 하면서 휘청거리는 스릴러 코믹 컷", tts: "으차차! 양말 신다가 우주 구경할 뻔했네!" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "허리를 굽히는데 삐걱 소리가 나며 허리를 잡고 끙끙대는 모습", tts: "허리가 안 굽혀져서 양말 신는 것도 서커스야 서커스." },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "의자에 편하게 앉아서 플라스틱 보조 틀에 양말을 씌우고 발만 쏙 넣음", tts: "숙이지 말고 그냥 발만 쏙 밀어 넣어봐." },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "1초 만에 쓱 양말이 완벽하게 착용됨. 허리 1도 안 굽힘", tts: "어라? 손 하나 안 대고 양말이 신겨졌네?!" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "당당하게 외출 채비를 마친 할아버지", tts: "허리 아픈 날엔 이 보조기가 효자네 효자!" }
+                ],
+                promptS1: "Funny grandfather balancing on one leg trying to put on a sock, wobbling dramatically, living room background --ar 9:16",
+                promptS3: "Foot sliding easily into a sock slider device while sitting comfortably in a chair, effortless motion --ar 9:16"
+            },
+            {
+                id: 8,
+                rank: 8,
+                top3: false,
+                category: 'life',
+                title: '청소하다가 허리와 협상하는 할머니',
+                product: '스프레이 길이 조절 엠보싱 밀대',
+                hook: '"오늘 청소는 여기까지만 하자… 허리가 파업했어!"',
+                appeal: '쪼그려 앉아 걸레질하는 현실 공감',
+                badgeColor: 'bg-slate-600',
+                bgGradient: 'from-slate-50 to-amber-50',
+                borderColor: 'border-slate-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "바닥 쪼그려 앉아 엎드려 걸레질하다가 허리 잡고 굳어버린 컷", tts: "아이고 허리야! 청소하다 허리가 멈춰버렸네!" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "허리와 대화하듯 '허리님 조금만 참아주세요' 구걸하는 코믹 연출", tts: "내 허리한테 살살 달래가며 청소해야 하다니..." },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "키 높이에 맞춰 길이를 쭉 늘리고 물 스프레이 칙칙 나오는 밀대 등판", tts: "이제 꼿꼿하게 서서 당당하게 닦자고!" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "서서 슥슥 미는데 물 분사와 함께 묵은 때가 시원하게 지워짐", tts: "칙칙 뿌리고 슥 미니까 허리 펼 일도 없잖아?" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "허리 팡팡 두드리며 만족스러운 미소", tts: "걸레질은 이제 꼿꼿하게 서서 하세요!" }
+                ],
+                promptS1: "Grandmother kneeling on floor cleaning with a rag, holding her lower back with pained comic face expression --ar 9:16",
+                promptS3: "Standing tall grandmother comfortably pushing a long ergonomic spray mop, water mist spraying on shiny clean floor --ar 9:16"
+            },
+            {
+                id: 9,
+                rank: 9,
+                top3: false,
+                category: 'kitchen',
+                title: '냉장고 속 반찬 미스터리',
+                product: '투명 손잡이 트레이 & 밀폐 정리 용기',
+                hook: '"반찬을 찾는 건지 보물찾기를 하는 건지…"',
+                appeal: '검은 봉지 & 불투명 반찬통 뒤엉킨 냉장고 대혼란',
+                badgeColor: 'bg-slate-600',
+                bgGradient: 'from-slate-50 to-sky-50',
+                borderColor: 'border-slate-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "냉장고 문 열었는데 검은 봉다리와 밑반찬 통이 와르르 쏟아질 듯한 아슬아슬 컷", tts: "어제 해둔 멸치볶음이 도대체 어디로 증발했지?" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "뚜껑을 하나하나 다 열어보며 냄새 맡고 찡그리는 탐정놀이 연출", tts: "통은 많은데 내용물이 안 보이니 다 열어봐야 안다니까!" },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "투명 가시성 100% 손잡이 서랍형 용기 세트로 싹 정리", tts: "속이 훤히 보이는 투명 트레이에 딱딱 넣어두면?" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "냉장고 문 열자마자 0.1초 만에 멸치볶음 손잡이 슥 당겨서 꺼냄", tts: "오호! 눈으로 바로 보고 서랍처럼 쏙 꺼내네!" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "정돈된 냉장고 보며 뿌듯해함", tts: "냉장고 보물찾기 놀이 이제 졸업입니다!" }
+                ],
+                promptS1: "Cluttered messy refrigerator interior filled with opaque black plastic bags and misaligned containers, elderly woman peeking inside confused --ar 9:16",
+                promptS3: "Extremely organized refrigerator with clear transparent pull-out trays, neat labeled food containers glowing brightly --ar 9:16"
+            },
+            {
+                id: 10,
+                rank: 10,
+                top3: false,
+                category: 'health',
+                title: '돋보기 없이는 못 사는 할머니',
+                product: '스마트폰 탁상용 거치대 & 자석 확대경',
+                hook: '"글씨가 왜 이렇게 작아졌어? 나만 안 보이나?"',
+                appeal: '스마트폰 돋보기 앱 찾거나 팔 길게 뻗어 보는 공감',
+                badgeColor: 'bg-slate-600',
+                bgGradient: 'from-slate-50 to-yellow-50',
+                borderColor: 'border-slate-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: "스마트폰 글씨 보려고 팔을 최대로 쭉 뻗어서 멀리 두고 눈 찡그리는 코믹 컷", tts: "아이고, 글씨가 깨알만 해서 팔이 짧아 모자라네!" },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "돋보기 찾으러 온 집안 뒤지다가 핸드폰 떨어뜨릴 뻔함", tts: "돋보기는 꼭 찾으려면 눈앞에서 사라진다니까." },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: "각도 조절 거치대에 핸드폰을 올리고 대형 돋보기 스크린 짠 연출", tts: "팔 뻗지 말고 거치대에 딱 올리고 왕 글씨로 보자!" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "카톡 글씨와 영상이 신문지 제목처럼 큼직하게 뻥튀기되어 편하게 시청", tts: "와! 눈이 시원~하게 뻥 뚫리듯이 잘 보이네!" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "편안하게 손을 프리하게 두고 영상 시청", tts: "눈도 편하고 손목도 안 아프고 일석이조네!" }
+                ],
+                promptS1: "Elderly woman stretching her arm completely out to read tiny text on smartphone, squinting funny expression --ar 9:16",
+                promptS3: "Smartphone mounted on a sturdy desk stand with a large clear screen magnifier rendering big readable text effortlessly --ar 9:16"
+            }
+        ];
+
+        let selectedCustomCategory = seniorCategories20[0];
+
+        // 페이지 초기화 및 렌더링
+        window.onload = function() {
+            renderCards(shortsData);
+            initCategoryIconGrid();
+        };
+
+        // 20개 원터치 카테고리 아이콘 그리드 초기화
+        function initCategoryIconGrid() {
+            const grid = document.getElementById('icon-category-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            seniorCategories20.forEach((cat, index) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `cat-icon-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition-all active:scale-95 ${index === 0 ? 'border-emerald-600 bg-emerald-50 ring-2 ring-emerald-500/30' : 'border-slate-200 bg-white hover:bg-slate-50'}`;
+                btn.dataset.id = cat.id;
+                btn.innerHTML = `
+                    <i class="fa-solid ${cat.icon} ${cat.color} text-lg mb-1"></i>
+                    <span class="text-[11px] font-bold text-slate-800 leading-tight break-keep">${cat.name}</span>
+                `;
+                btn.onclick = () => selectCustomCategory(cat, btn);
+                grid.appendChild(btn);
+            });
+
+            // 첫 번째 카테고리 기본 값 채우기
+            applyCategorySample(seniorCategories20[0]);
+        }
+
+        // 커스텀 모달 내 아이콘 터치 시 샘플 자동 채우기
+        function selectCustomCategory(cat, clickedBtn) {
+            selectedCustomCategory = cat;
+            document.querySelectorAll('.cat-icon-btn').forEach(b => {
+                b.className = 'cat-icon-btn flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-center transition-all active:scale-95';
+            });
+            clickedBtn.className = 'cat-icon-btn flex flex-col items-center justify-center p-2.5 rounded-xl border-2 border-emerald-600 bg-emerald-50 ring-2 ring-emerald-500/30 text-center transition-all active:scale-95';
+            
+            document.getElementById('selected-cat-label').innerText = `선택됨: ${cat.name}`;
+            applyCategorySample(cat);
+        }
+
+        function applyCategorySample(cat) {
+            document.getElementById('inp-title').value = cat.sampleTitle;
+            document.getElementById('inp-product').value = cat.sampleProduct;
+            document.getElementById('inp-hook').value = cat.sampleHook;
+            document.getElementById('inp-desc').value = cat.sampleDesc;
+        }
+
+        // 카드 렌더링 함수 (카드 전체 터치로 상세 열기 지원)
+        function renderCards(data) {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+
+            data.forEach(item => {
+                const isTop3 = item.top3;
+                const card = document.createElement('div');
+                card.onclick = () => openDetailModal(item.id);
+                card.className = `touch-card cursor-pointer bg-white rounded-2xl border ${item.borderColor} shadow-sm hover:shadow-lg overflow-hidden flex flex-col justify-between group`;
+                
+                card.innerHTML = `
+                    <div>
+                        <!-- 카드 헤더 -->
+                        <div class="p-5 bg-gradient-to-r ${item.bgGradient} border-b border-slate-100 flex items-start justify-between">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="text-xs font-extrabold px-2.5 py-0.5 rounded-md ${isTop3 ? 'bg-orange-500 text-white shadow-xs' : 'bg-slate-200 text-slate-700'}">
+                                        ${isTop3 ? '🔥 TOP ' + item.rank + ' 추천' : item.rank + '번 소재'}
+                                    </span>
+                                    <span class="text-xs text-slate-600 font-bold">${getCategoryKorean(item.category)}</span>
+                                </div>
+                                <h3 class="font-black text-slate-900 text-lg group-hover:text-orange-600 transition-colors">${item.title}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-white/80 flex items-center justify-center text-orange-500 shadow-xs group-hover:bg-orange-500 group-hover:text-white transition-all">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                            </div>
+                        </div>
+
+                        <!-- 카드 바디 -->
+                        <div class="p-5 space-y-3 text-xs">
+                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                                <span class="text-slate-400 block font-bold mb-1"><i class="fa-solid fa-quote-left mr-1 text-orange-400"></i>첫 장면 후킹 대사</span>
+                                <p class="font-extrabold text-slate-800 text-sm italic">${item.hook}</p>
+                            </div>
+
+                            <div class="space-y-1">
+                                <span class="text-slate-400 font-bold block">자연스럽게 등장할 제품:</span>
+                                <span class="inline-block bg-orange-50 text-orange-700 font-extrabold px-2.5 py-1 rounded-lg border border-orange-200">${item.product}</span>
+                            </div>
+
+                            <div class="space-y-1">
+                                <span class="text-slate-400 font-bold block">핵심 공감 포인트:</span>
+                                <p class="text-slate-600 font-medium">${item.appeal}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 카드 푸터 (터치 유도 강조) -->
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between group-hover:bg-orange-50/60 transition-colors">
+                        <span class="text-xs font-bold text-slate-500"><i class="fa-regular fa-clock mr-1 text-orange-500"></i>20초 5단계 대본</span>
+                        <span class="px-3.5 py-1.5 bg-slate-900 group-hover:bg-orange-600 text-white rounded-xl font-bold text-xs transition-colors flex items-center gap-1.5 shadow-xs">
+                            터치해서 대본 보기 <i class="fa-solid fa-hand-pointer text-[11px]"></i>
+                        </span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 카테고리 텍스트 변환
+        function getCategoryKorean(cat) {
+            switch(cat) {
+                case 'health': return '건강 / 안마';
+                case 'beauty': return '뷰티 / 헤어';
+                case 'life': return '생활 / 안전';
+                case 'kitchen': return '주방 / 정리';
+                default: return '시니어 공감';
+            }
+        }
+
+        // 아이콘 필터링 함수
+        function filterCategory(cat) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.dataset.cat === cat) {
+                    btn.className = 'filter-btn active flex flex-col items-center justify-center p-3 rounded-xl border-2 border-orange-500 bg-orange-50 text-orange-700 transition-all active:scale-95 icon-btn-active';
+                } else {
+                    btn.className = 'filter-btn flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-orange-50/50 transition-all active:scale-95';
+                }
+            });
+
+            if (cat === 'all') {
+                renderCards(shortsData);
+            } else if (cat === 'top3') {
+                renderCards(shortsData.filter(d => d.top3));
+            } else {
+                renderCards(shortsData.filter(d => d.category === cat));
+            }
+        }
+
+        // 탭 전환 (데스크톱 + 모바일 하단 바 동기화)
+        function switchTab(tabName) {
+            const tabList = document.getElementById('tab-list');
+            const tabFormula = document.getElementById('tab-formula');
+            const btnList = document.getElementById('btn-tab-list');
+            const btnFormula = document.getElementById('btn-tab-formula');
+            const mobList = document.getElementById('mob-tab-list');
+            const mobFormula = document.getElementById('mob-tab-formula');
+
+            if (tabName === 'list') {
+                tabList.classList.remove('hidden');
+                tabFormula.classList.add('hidden');
+                if(btnList) btnList.className = "px-4 py-2 text-sm font-bold rounded-xl transition-all bg-orange-600 text-white shadow flex items-center gap-2";
+                if(btnFormula) btnFormula.className = "px-4 py-2 text-sm font-bold text-slate-300 hover:text-white rounded-xl transition-all hover:bg-slate-800 flex items-center gap-2";
+                if(mobList) mobList.className = "flex flex-col items-center justify-center py-1 px-3 text-orange-600 font-bold";
+                if(mobFormula) mobFormula.className = "flex flex-col items-center justify-center py-1 px-3 text-slate-500 font-bold";
+            } else {
+                tabList.classList.add('hidden');
+                tabFormula.classList.remove('hidden');
+                if(btnFormula) btnFormula.className = "px-4 py-2 text-sm font-bold rounded-xl transition-all bg-orange-600 text-white shadow flex items-center gap-2";
+                if(btnList) btnList.className = "px-4 py-2 text-sm font-bold text-slate-300 hover:text-white rounded-xl transition-all hover:bg-slate-800 flex items-center gap-2";
+                if(mobFormula) mobFormula.className = "flex flex-col items-center justify-center py-1 px-3 text-orange-600 font-bold";
+                if(mobList) mobList.className = "flex flex-col items-center justify-center py-1 px-3 text-slate-500 font-bold";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 상세보기 모달 열기
+        let currentActiveItem = null;
+        function openDetailModal(id) {
+            const item = shortsData.find(d => d.id === id);
+            if (!item) return;
+            currentActiveItem = item;
+
+            document.getElementById('modal-badge').innerText = item.top3 ? `TOP ${item.rank} 우선제작` : `${item.rank}위`;
+            document.getElementById('modal-badge').className = `px-2.5 py-1 rounded-md text-xs font-bold text-white ${item.badgeColor}`;
+            document.getElementById('modal-title').innerText = item.title;
+            document.getElementById('modal-product').innerText = item.product;
+            document.getElementById('modal-hook').innerText = item.hook;
+            document.getElementById('modal-appeal').innerText = item.appeal;
+
+            // 타임라인 렌더링
+            const timelineContainer = document.getElementById('modal-timeline');
+            timelineContainer.innerHTML = '';
+            item.timeline.forEach((step, idx) => {
+                const stepEl = document.createElement('div');
+                stepEl.className = "bg-white p-3.5 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs shadow-xs";
+                stepEl.innerHTML = `
+                    <div class="flex items-center gap-2.5 md:w-1/4">
+                        <span class="font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded text-[11px] whitespace-nowrap">${step.time}</span>
+                        <span class="font-extrabold text-slate-800 whitespace-nowrap">${step.stage}</span>
+                    </div>
+                    <div class="md:w-2/4 text-slate-700">
+                        <strong class="text-slate-900 block text-[11px] mb-0.5">화면 연출 (Visual):</strong>
+                        ${step.act}
+                    </div>
+                    <div class="md:w-2/4 bg-slate-50 p-2 rounded border border-slate-100 text-slate-800 font-medium">
+                        <strong class="text-orange-600 block text-[10px] mb-0.5"><i class="fa-solid fa-microphone mr-1"></i>TTS 더빙 대사:</strong>
+                        "${step.tts}"
+                    </div>
+                `;
+                timelineContainer.appendChild(stepEl);
+            });
+
+            // 프롬프트 세팅
+            document.getElementById('prompt-s1').value = item.promptS1;
+            document.getElementById('prompt-s3').value = item.promptS3;
+
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+
+        // 커스텀 소재 모달
+        function openCustomModal() {
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // 신규 대본 바이브 생성 처리
+        function handleCustomSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('inp-title').value;
+            const product = document.getElementById('inp-product').value;
+            const category = selectedCustomCategory ? selectedCustomCategory.filterGroup : 'life';
+            const catName = selectedCustomCategory ? selectedCustomCategory.name : '맞춤 소재';
+            const hook = document.getElementById('inp-hook').value;
+            const desc = document.getElementById('inp-desc').value;
+
+            const newItem = {
+                id: Date.now(),
+                rank: shortsData.length + 1,
+                top3: false,
+                category: category,
+                title: title,
+                product: product,
+                hook: `"${hook.replace(/^"|"$/g, '')}"`,
+                appeal: `[${catName}] ${desc}`,
+                badgeColor: 'bg-emerald-600',
+                bgGradient: 'from-emerald-50 to-teal-50',
+                borderColor: 'border-emerald-200',
+                timeline: [
+                    { time: "0~2초", stage: "1. 후킹", act: `${desc}의 코믹하고 공감되는 첫 장면 연출`, tts: hook },
+                    { time: "3~7초", stage: "2. 문제 심화", act: "일상 속 불편함이 과장되게 표출되며 당황하는 시니어 캐릭터", tts: "아이고, 매번 이러니까 정말 답답해 죽겠네!" },
+                    { time: "8~13초", stage: "3. 해결책 등장", act: `${product}이(가) 소품처럼 자연스럽게 등장해 상황을 반전시킴`, tts: "어라? 이럴 땐 요 녀석을 툭 써주면?" },
+                    { time: "14~18초", stage: "4. 시원한 반전", act: "문제가 손쉽게 해결되고 기분 좋아진 시니어의 환한 미소", tts: "와! 거짓말처럼 1초 만에 깔끔하게 해결됐네!" },
+                    { time: "19~20초", stage: "5. 공감 마무리", act: "자연스럽게 사용 후 여운 연출", tts: "이런 거 집에 하나 두면 아주 든든하겠어~" }
+                ],
+                promptS1: `3D Pixar style cute Korean elderly character in daily life, funny relatable situation: ${desc}, warm lighting --ar 9:16`,
+                promptS3: `Close up of using ${product} conveniently in daily Korean home, satisfying easy solution, bright clean mood --ar 9:16`
+            };
+
+            shortsData.unshift(newItem);
+            filterCategory('all');
+            closeCustomModal();
+            showToast(`'${catName}' 맞춤 쇼츠 대본이 생성되었습니다!`);
+            
+            // 생성된 아이템 상세보기 자동 오픈
+            openDetailModal(newItem.id);
+        }
+
+        // 텍스트 클립보드 복사 함수 (execCommand 기반 fallback 지원)
+        function copyTextToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('클립보드에 복사되었습니다!');
+            } catch (err) {
+                showToast('복사에 실패했습니다.');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function copyPrompt(elementId) {
+            const text = document.getElementById(elementId).value;
+            copyTextToClipboard(text);
+        }
+
+        function copyScriptText() {
+            if (!currentActiveItem) return;
+            let fullText = `[골라잘 쇼츠 대본] ${currentActiveItem.title}\n`;
+            fullText += `제품: ${currentActiveItem.product}\n`;
+            fullText += `첫 후킹: ${currentActiveItem.hook}\n\n`;
+            currentActiveItem.timeline.forEach(step => {
+                fullText += `${step.time} (${step.stage})\n- 화면: ${step.act}\n- 대사: ${step.tts}\n\n`;
+            });
+            copyTextToClipboard(fullText);
+        }
+
+        // HTML 파일 다운로드 기능
+        function downloadHTMLFile() {
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'golajar_shorts_studio.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('golajar_shorts_studio.html 파일이 다운로드 되었습니다!');
+        }
+
+        // 토스트 알림 표시
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
